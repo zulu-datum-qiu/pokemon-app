@@ -77,15 +77,15 @@ const Title = styled.h1`
 `;
 
 const TwoColumnLayout = styled.div`
-  display: grid,
-  grid-template-columns: 70% 30%,
-  grid-column-gap: 1rem,
+  display: grid;
+  grid-template-columns: 70% 30%;
+  grid-column-gap: 1rem;
 `;
 
 const Container = styled.div`
-  margin: auto,
-  width: 800px,
-  padding-top: 1rem,
+  margin: auto;
+  width: 800px;
+  padding-top: 1rem;
 `;
 
 const Input = styled.input`
@@ -151,7 +151,6 @@ function App() {
             </tbody>
           </table>
         </div>
-        
         
         {selectedItem && (
           <PokemonInfo {...selectedItem} />
