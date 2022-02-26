@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import styled from '@emotion/styled';
 
 import PokemonInfo from './components/PokemonInfo';
@@ -8,16 +8,44 @@ import PokemonContext from './PokemonContext';
 
 import './App.css';
 
+// reducer to facilitate the centralize management
+// of the various state variables
+// better practice for code maintenance
+const pokemonReducer = (state, action) => {
+  switch(action.type){
+    case "SET_FILTER":
+      return {
+        ... state,
+        filter : action.payload,
+      };
+    case "SET_POKEMONS":
+      return {
+        ... state,
+        pokemons : action.payload,
+      };
+    case "SET_SELECTED_ITEM":
+      return {
+        ... state,
+        selectedItem : action.payload,
+      }
+    default:
+      throw new Error("Action not defined.");
+  }
+}
+
+// styled Title component
 const Title = styled.h1`
   text-align: center;
 `;
 
+// styled Layout component
 const TwoColumnLayout = styled.div`
   display: grid;
   grid-template-columns: 70% 30%;
   grid-column-gap: 1rem;
 `;
 
+// styled Page Container component
 const PageContainer = styled.div`
   margin: auto;
   width: 800px;
@@ -26,35 +54,40 @@ const PageContainer = styled.div`
 
 function App() {
   
-  const [filter, filterSet] = useState("");
-  const [pokemons, pokemonsSet] = useState([]);
-  const [selectedItem, selectedItemSet] = useState(null);
+  // initialize the state
+  const [state, dispatch] = useReducer(pokemonReducer, {
+    filter: "",
+    pokemons: [],
+    selectedPokemon: null
+  });
 
+  // get the pokemons json data
   useEffect(async ()=>{
-    // get the pokemon json data
+    
     const resp = await fetch("http://localhost:3000/pokemon-app/pokemon.json")
     const data = await resp.json();
 
     // update the state that tracks the pokemon data
-    pokemonsSet(data);
+    dispatch({
+      type: "SET_POKEMONS", 
+      payload: data
+    });
   }, []);
 
-  if( !pokemons ){
+  // when loading
+  if( !state.pokemons ){
     return (
       <div>Loading ...</div>
     )
   }
 
+  // page rendering
   return (
     <>
       <PokemonContext.Provider
         value={{
-          filter,
-          pokemons,
-          selectedItem,
-          filterSet,
-          pokemonsSet,
-          selectedItemSet,
+          state,
+          dispatch
         }}    
       >
         <PageContainer>
