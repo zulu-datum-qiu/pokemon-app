@@ -1,14 +1,15 @@
-import React, { useContext } from 'react';
-import PokemonContext from '../PokemonContext';
-import PokemonType from '../pokemonType';
+import React from 'react';
+
+import store from '../store';
+import { observer } from 'mobx-react';
 
 const PokemonInfo = () => {
   
-  const { state:{selectedItem} } = useContext(PokemonContext);
+  // const { state:{selectedItem} } = useContext(PokemonContext);
   
-  return selectedItem ? (
+  return store.selectedItem ? (
     <div>
-      <h1>{selectedItem.name.english}</h1>
+      <h1>{store.selectedItem.name.english}</h1>
       <table>
         <thead>
           <tr>
@@ -18,10 +19,10 @@ const PokemonInfo = () => {
         </thead>
         <tbody>
         {
-          Object.keys(selectedItem.base).map(key => (
+          Object.keys(store.selectedItem.base).map(key => (
             <tr key={key}>
               <td>{key}</td>
-              <td>{selectedItem.base[key]}</td>
+              <td>{store.selectedItem.base[key]}</td>
             </tr>
           ))
         }
@@ -31,6 +32,4 @@ const PokemonInfo = () => {
   ): null;
 }
 
-PokemonInfo.propTypes = PokemonType | "undefined";
-
-export default PokemonInfo;
+export default observer(PokemonInfo);

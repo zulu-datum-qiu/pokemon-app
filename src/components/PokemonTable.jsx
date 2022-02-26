@@ -1,10 +1,9 @@
 import React, { useContext } from 'react';
-import PokemonContext from '../PokemonContext';
 import PokemonRow from './PokemonRow';
+import store from '../store';
+import { observer } from 'mobx-react';
 
 const PokemonTable = () => {
-
-  const { state: {pokemons, filter}, dispatch} = useContext(PokemonContext);
   
   return (
     <table width="100%">
@@ -16,20 +15,16 @@ const PokemonTable = () => {
       </thead>
       <tbody>
         {
-          pokemons
-          .filter((pokemon) => pokemon.name.english.toLowerCase().includes(filter.toLowerCase()))
+          store.pokemons
+          .filter((pokemon) => pokemon.name.english.toLowerCase().includes(store.filter.toLowerCase()))
           .slice(0,20)
           .map((pokemon, index) => (
-            <PokemonRow pokemon={pokemon} key={index} onClick={(pokemon) => dispatch({
-              type: "SET_SELECTED_ITEM",
-              payload: pokemon
-            })}/>
+            <PokemonRow pokemon={pokemon} key={index} onClick={(pokemon) => store.setSelectedItem(pokemon)}/>
           ))
         }
-        
       </tbody>
     </table>
   )
 }
 
-export default PokemonTable;
+export default observer(PokemonTable);
