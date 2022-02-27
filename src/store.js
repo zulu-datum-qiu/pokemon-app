@@ -1,4 +1,13 @@
+/* state management
+**
+** Import :
+** All functions that will change properties (observables)
+** will have to be declared as action
+** in the constructor of the mobx store class.
+*/
+
 import { makeObservable, observable, computed, action } from 'mobx';
+
 
 class Store {
   pokemons = [];
@@ -24,6 +33,7 @@ class Store {
     )
   }
 
+  // Actions
   setPokemons(pokemons){
     this.pokemons = pokemons;
   }
